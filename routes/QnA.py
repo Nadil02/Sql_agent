@@ -1,8 +1,9 @@
-from fastapi import APIRouter 
+from fastapi import APIRouter
 from schemas.QnA import ChatbotRequest
 from services.QnA import get_chatbot_response
 
 router = APIRouter()
+
 
 @router.post("/chatbot")
 async def chatbot_endpoint(query: ChatbotRequest):
@@ -15,4 +16,3 @@ async def chatbot_endpoint(query: ChatbotRequest):
         return {
             "response": f"error occured",
         }
-
