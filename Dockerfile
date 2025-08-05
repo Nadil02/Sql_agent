@@ -8,21 +8,22 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (excluding conflicting ODBC packages)
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
     gnupg \
-    unixodbc \
-    unixodbc-dev \
     g++ \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Microsoft ODBC Driver 17 for SQL Server
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+# Install Microsoft ODBC Driver 17 for SQL Server with conflict resolution
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft-prod.gpg \
+    && echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/11/prod bullseye main" > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
+    && ACCEPT_EULA=Y apt-get install -y --allow-downgrades \
+        msodbcsql17 \
+        unixodbc-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip, setuptools, and wheel BEFORE installing packages
