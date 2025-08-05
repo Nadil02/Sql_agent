@@ -3,7 +3,7 @@ uvicorn==0.24.0
 pydantic==2.5.0
 pydantic-settings==2.0.3
 sqlalchemy==2.0.23
-pyodbc==5.0.1
+pyodbc
 langchain
 langchain-community>=0.0.38
 langchain-google-genai
