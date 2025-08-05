@@ -85,7 +85,7 @@ def get_session_history(session_id: str) -> InMemoryChatMessageHistory:
 
 #  agent initialization
 try:
-    agent = create_react_agent(llm, tools, prompt=system_message)
+    agent = create_react_agent(llm, tools, system_message)
     agent_with_memory = RunnableWithMessageHistory(
         agent,
         get_session_history,
